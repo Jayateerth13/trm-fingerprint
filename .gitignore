@@ -2,16 +2,16 @@
 dataset/
 
 # Trained model weights
-artifacts/**/*.pt
-artifacts/**/*.pth
-artifacts/**/*.ckpt
+artifacts/*.pt
+artifacts/*.pth
+artifacts/*.ckpt
 
 # Large generated CSVs (can be reproduced by running notebook 01)
-artifacts/**/pairs_train.csv
-artifacts/**/pairs_val.csv
-artifacts/**/pairs_test.csv
-artifacts/**/manifest.csv
-artifacts/**/manifest_with_split.csv
+artifacts/pairs_train.csv
+artifacts/pairs_val.csv
+artifacts/pairs_test.csv
+artifacts/manifest.csv
+artifacts/manifest_with_split.csv
 
 # Python virtual environment
 .venv/

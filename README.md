@@ -18,18 +18,18 @@ The evaluation task is fingerprint verification: given two fingerprint images, d
 
 ```
 .
-├── notebooks_fvc2004/
-│   ├── 01_data_engineering_fvc2004.ipynb   # Dataset manifest, splits, pair generation
-│   ├── 02_eda_fvc2004.ipynb                # Exploratory data analysis and plots
-│   └── 03_baseline_fvc2004.ipynb           # NCC and Siamese ResNet-18 baselines
+├── notebooks/
+│   ├── 01_data_engineering.ipynb   # Dataset manifest, splits, pair generation
+│   ├── 02_eda.ipynb                # Exploratory data analysis and plots
+│   └── 03_baseline.ipynb           # NCC and Siamese ResNet-18 baselines
 │
-├── artifacts/fvc2004/
-│   ├── manifest.csv                        # Full image manifest
-│   ├── manifest_with_split.csv             # Manifest with train/val/test labels
-│   ├── pairs_train/val/test.csv            # Genuine and impostor pairs per split
-│   ├── dataset_summary.json               # Dataset statistics
-│   ├── baseline_results.json              # NCC and ResNet-18 evaluation results
-│   └── figures/                            # All EDA and baseline plots
+├── artifacts/
+│   ├── manifest.csv                # Full image manifest
+│   ├── manifest_with_split.csv     # Manifest with train/val/test labels
+│   ├── pairs_train/val/test.csv    # Genuine and impostor pairs per split
+│   ├── dataset_summary.json        # Dataset statistics
+│   ├── baseline_results.json       # NCC and ResNet-18 evaluation results
+│   └── figures/                    # All EDA and baseline plots
 │
 ├── dataset/FVC2004/                        # Raw dataset (not tracked in git)
 ├── checkpoint_report.tex                   # IEEE-format checkpoint report
@@ -80,13 +80,13 @@ jupyter notebook
 
 | Step | Notebook | What it does |
 |------|----------|--------------|
-| 1 | `01_data_engineering_fvc2004.ipynb` | Builds manifest, splits by finger identity, generates pairs |
-| 2 | `02_eda_fvc2004.ipynb` | EDA — intensity distributions, NCC analysis, class balance plots |
-| 3 | `03_baseline_fvc2004.ipynb` | NCC baseline (EER 30.8%) and Siamese ResNet-18 (EER 8.7%) |
+| 1 | `01_data_engineering.ipynb` | Builds manifest, splits by finger identity, generates pairs |
+| 2 | `02_eda.ipynb` | EDA — intensity distributions, NCC analysis, class balance plots |
+| 3 | `03_baseline.ipynb` | NCC baseline (EER 30.8%) and Siamese ResNet-18 (EER 8.7%) |
 
-All outputs (CSVs, plots, model weights, result JSON) are saved to `artifacts/fvc2004/`.
+All outputs (CSVs, plots, model weights, result JSON) are saved to `artifacts/`.
 
-> **GPU:** The baseline notebook runs on CPU by default. To use a GPU, set `FORCE_CPU = False` in Cell 1 of `03_baseline_fvc2004.ipynb`. For free GPU access, use [Google Colab](https://colab.research.google.com) or [Kaggle Notebooks](https://www.kaggle.com/code).
+> **GPU:** The baseline notebook runs on CPU by default. To use a GPU, set `FORCE_CPU = False` in Cell 1 of `03_baseline.ipynb`. For free GPU access, use [Google Colab](https://colab.research.google.com) or [Kaggle Notebooks](https://www.kaggle.com/code).
 
 ---
 
@@ -112,4 +112,4 @@ The next phase implements **TRM**: a small, parameter-efficient decision module 
 - Use significantly fewer fingerprint-specific trainable parameters
 - Faster training time due to frozen encoder (no backprop through ResNet-18)
 
-TRM implementation will be added to `notebooks_fvc2004/04_trm_fvc2004.ipynb`.
+TRM implementation will be added to `notebooks/04_trm.ipynb`.
