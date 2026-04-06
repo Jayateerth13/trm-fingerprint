@@ -1,0 +1,55 @@
+# Dataset — do not commit raw fingerprint data
+dataset/
+
+# Trained model weights
+artifacts/**/*.pt
+artifacts/**/*.pth
+artifacts/**/*.ckpt
+
+# Large generated CSVs (can be reproduced by running notebook 01)
+artifacts/**/pairs_train.csv
+artifacts/**/pairs_val.csv
+artifacts/**/pairs_test.csv
+artifacts/**/manifest.csv
+artifacts/**/manifest_with_split.csv
+
+# Python virtual environment
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# LaTeX — source and build artifacts
+*.tex
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz

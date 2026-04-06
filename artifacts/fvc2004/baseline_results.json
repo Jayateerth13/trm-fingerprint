@@ -1,0 +1,29 @@
+{
+  "ncc_baseline": {
+    "eer": 0.30838294603418476,
+    "eer_threshold": 0.1868290963297139,
+    "accuracy_at_eer": 0.6916,
+    "far_at_eer": 0.3073170731707317,
+    "frr_at_eer": 0.3094488188976378,
+    "test_pairs_evaluated": 2500
+  },
+  "siamese_resnet18_baseline": {
+    "eer": 0.08719941580762612,
+    "eer_threshold": 0.8046771633720589,
+    "accuracy_at_eer": 0.9128,
+    "far_at_eer": 0.08646917534027222,
+    "frr_at_eer": 0.08792965627498002,
+    "test_pairs_evaluated": 2500,
+    "model_params": 11242176,
+    "epochs_trained": 6,
+    "train_pairs_used": 8000,
+    "backbone": "resnet18_imagenet",
+    "embedding_dim": 128,
+    "image_size_cnn": [
+      224,
+      224
+    ],
+    "false_accepts": 108,
+    "false_rejects": 110
+  }
+}

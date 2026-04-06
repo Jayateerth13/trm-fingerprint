@@ -1,0 +1,86 @@
+{
+  "dataset": "FVC2004",
+  "dataset_root": "dataset/FVC2004",
+  "num_images_total": 3520,
+  "num_finger_identities": 440,
+  "partitions": [
+    "DB1_A",
+    "DB1_B",
+    "DB2_A",
+    "DB2_B",
+    "DB3_A",
+    "DB3_B",
+    "DB4_A",
+    "DB4_B"
+  ],
+  "images_by_partition": {
+    "DB1_A": 800,
+    "DB1_B": 80,
+    "DB2_A": 800,
+    "DB2_B": 80,
+    "DB3_A": 800,
+    "DB3_B": 80,
+    "DB4_A": 800,
+    "DB4_B": 80
+  },
+  "images_by_sensor": {
+    "optical_crossmatch_v300": 880,
+    "optical_digitalpersona_uareu4000": 880,
+    "thermal_atmel_fingerchip": 880,
+    "synthetic_sfinge": 880
+  },
+  "impressions_per_finger_min": 8,
+  "impressions_per_finger_max": 8,
+  "impressions_per_finger_mean": 8.0,
+  "split": {
+    "finger_id_counts": {
+      "train": 308,
+      "val": 66,
+      "test": 66
+    },
+    "image_counts": {
+      "train": 2464,
+      "test": 528,
+      "val": 528
+    }
+  },
+  "pairs": {
+    "train": {
+      "split": "train",
+      "genuine_pairs": 8624,
+      "impostor_pairs": 8624,
+      "total_pairs": 17248,
+      "impostor_sampling_attempts": 8634
+    },
+    "val": {
+      "split": "val",
+      "genuine_pairs": 1848,
+      "impostor_pairs": 1848,
+      "total_pairs": 3696,
+      "impostor_sampling_attempts": 1869
+    },
+    "test": {
+      "split": "test",
+      "genuine_pairs": 1848,
+      "impostor_pairs": 1848,
+      "total_pairs": 3696,
+      "impostor_sampling_attempts": 1864
+    }
+  },
+  "preprocessing": {
+    "convert": "grayscale",
+    "resize": [
+      256,
+      256
+    ],
+    "normalize": "x/255"
+  },
+  "config": {
+    "seed": 42,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "test_ratio": 0.15,
+    "impostor_per_genuine": 1.0,
+    "max_genuine_pairs_per_finger": 28
+  }
+}
