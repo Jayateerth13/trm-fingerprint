@@ -32,7 +32,6 @@ The evaluation task is fingerprint verification: given two fingerprint images, d
 │   └── figures/                    # All EDA and baseline plots
 │
 ├── dataset/FVC2004/                        # Raw dataset (not tracked in git)
-├── checkpoint_report.tex                   # IEEE-format checkpoint report
 ├── requirements.txt
 └── README.md
 ```
@@ -56,7 +55,7 @@ pip install -r requirements.txt
 
 **3. Place the FVC2004 dataset**
 
-Download FVC2004 and place it at:
+The dataset is not included in this repository. Place it at:
 
 ```
 dataset/FVC2004/DB1_A/
@@ -67,6 +66,8 @@ dataset/FVC2004/DB4_B/
 ```
 
 Each folder should contain `.tif` files named `{finger}_{impression}.tif` (e.g. `1_1.tif`).
+
+> **Need the dataset?** If you have trouble obtaining FVC2004, feel free to reach out at **jayateerth.kamatgi@sjsu.edu**.
 
 ---
 
