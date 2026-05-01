@@ -1,0 +1,38 @@
+{
+  "model": "SiamViTRM",
+  "architecture": {
+    "img_size": 128,
+    "patch_size": 16,
+    "n_patches": 64,
+    "d_model": 192,
+    "n_heads": 6,
+    "n_blocks": 4,
+    "K": 24,
+    "n_latent_steps": 3,
+    "T_recursion": 1,
+    "effective_depth": 16
+  },
+  "training": {
+    "epochs": 20,
+    "batch_size": 32,
+    "lr": 0.0003,
+    "weight_decay": 0.05,
+    "N_supervision": 1,
+    "EMA_decay": 0.995,
+    "train_pairs": 17248,
+    "loss_function": "BCE",
+    "pretrained": false
+  },
+  "evaluation": {
+    "test_pairs": 3696,
+    "eer": 0.1588203463203463,
+    "eer_threshold": 0.8734336293532041,
+    "accuracy_at_eer": 0.8411796536796536,
+    "far_at_eer": 0.15963203463203463,
+    "frr_at_eer": 0.15800865800865802,
+    "model_params": 1837440,
+    "false_accepts": 295,
+    "false_rejects": 292
+  }
+}
+
