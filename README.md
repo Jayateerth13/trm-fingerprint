@@ -6,7 +6,7 @@ Fingerprint verification baselines and Tiny Recursive Model (TRM) for parameter-
 
 ## Overview
 
-This project investigates whether a compact recursive reasoning module (TRM) can match the verification performance of a full deep baseline (Siamese ResNet-18) while using significantly fewer task-specific trainable parameters.
+This project evaluates fingerprint verification baselines and a compact recursive Transformer model (SiamViTRM / TRM-style) for parameter-efficient biometric matching, compared against a Siamese ResNet-18 baseline.
 
 The evaluation task is fingerprint verification: given two fingerprint images, determine if they belong to the same finger (genuine) or different fingers (impostor). Performance is measured using EER (Equal Error Rate), FAR, and FRR.
 
@@ -22,6 +22,8 @@ The evaluation task is fingerprint verification: given two fingerprint images, d
 │   ├── 01_data_engineering.ipynb   # Dataset manifest, splits, pair generation
 │   ├── 02_eda.ipynb                # Exploratory data analysis and plots
 │   └── 03_baseline.ipynb           # NCC and Siamese ResNet-18 baselines
+│   ├── 04_trm_model.ipynb          # SiamViTRM (TRM/ViTRM-style) training + evaluation (local)
+│   └── SiamViTRM_Colab_Final.ipynb # Colab notebook used to run training (GPU)
 │
 ├── artifacts/
 │   ├── manifest.csv                # Full image manifest
@@ -30,8 +32,21 @@ The evaluation task is fingerprint verification: given two fingerprint images, d
 │   ├── dataset_summary.json        # Dataset statistics
 │   ├── baseline_results.json       # NCC and ResNet-18 evaluation results
 │   └── figures/                    # All EDA and baseline plots
+│   └── trm/                        # SiamViTRM artifacts (weights, figures, results)
+│       ├── trm_results.json
+│       ├── siamvitrm_main.pt
+│       ├── siamvitrm_ema.pt
+│       ├── siamvitrm_ema_best.pt
+│       └── figures/
+│           ├── siamvitrm_architecture.png
+│           ├── siamvitrm_training_curve.png
+│           ├── far_frr_siamvitrm.png
+│           ├── siamvitrm_roc_curve.png
+│           └── siamvitrm_score_distribution.png
 │
 ├── dataset/FVC2004/                        # Raw dataset (not tracked in git)
+├── scripts/
+│   └── trm_model.py                        # SiamViTRM model + EMA implementation
 ├── requirements.txt
 └── README.md
 ```
@@ -84,33 +99,47 @@ jupyter notebook
 | 1 | `01_data_engineering.ipynb` | Builds manifest, splits by finger identity, generates pairs |
 | 2 | `02_eda.ipynb` | EDA — intensity distributions, NCC analysis, class balance plots |
 | 3 | `03_baseline.ipynb` | NCC baseline (EER 30.8%) and Siamese ResNet-18 (EER 8.7%) |
+| 4 | `04_trm_model.ipynb` | SiamViTRM (TRM/ViTRM-style) training + evaluation; saves outputs to `artifacts/trm/` |
 
 All outputs (CSVs, plots, model weights, result JSON) are saved to `artifacts/`.
 
 > **GPU:** The baseline notebook runs on CPU by default. To use a GPU, set `FORCE_CPU = False` in Cell 1 of `03_baseline.ipynb`. For free GPU access, use [Google Colab](https://colab.research.google.com) or [Kaggle Notebooks](https://www.kaggle.com/code).
 
+> **Colab training:** The notebook `notebooks/SiamViTRM_Colab_Final.ipynb` was used to run the SiamViTRM training on GPU and export the resulting artifacts under `artifacts/trm/`.
+
 ---
 
 ## Baseline Results (FVC2004 Test Set)
 
-| Method | EER | Accuracy@EER | FAR | FRR |
-|--------|-----|--------------|-----|-----|
-| NCC (no learning) | 0.308 | 0.692 | 0.307 | 0.309 |
-| Siamese ResNet-18 | **0.087** | **0.913** | 0.086 | 0.088 |
+| Method | Test pairs | Params | EER | Accuracy@EER | FAR | FRR |
+|--------|-----------:|------:|----:|-------------:|----:|----:|
+| NCC (no learning) | 2,500 | 0 | 0.308 | 0.692 | 0.307 | 0.309 |
+| Siamese ResNet-18 | 2,500 | 11.24M | **0.087** | **0.913** | 0.086 | 0.088 |
+| SiamViTRM (TRM/ViTRM-style) | 3,696 | 1.837M | 0.159 | 0.841 | 0.160 | 0.158 |
 
 Siamese ResNet-18: 11.2M parameters, trained for 6 epochs on 8,000 pairs (CPU).
 
 ---
 
-## Work in Progress — Tiny Recursive Model (TRM)
+## SiamViTRM — Tiny Recursive Model (TRM/ViTRM-style)
 
-The next phase implements **TRM**: a small, parameter-efficient decision module that operates on top of a frozen, general-purpose visual encoder (ImageNet-pretrained ResNet-18, weights not updated).
+This repository includes **SiamViTRM**, a parameter-efficient Siamese verifier that adapts:
+- **ViTRM**: a *weight-tied* recursive Transformer encoder with a prediction token \(y\) and latent memory tokens \(z\).
+- **TRM-style training**: EMA evaluation (and optional deep supervision).
 
-**Key idea:** Instead of fine-tuning 11M parameters end-to-end on fingerprint data, TRM learns a compact recursive comparison function (~50K parameters) that iteratively refines a match decision from generic visual embeddings.
+**Architecture (this run):**
+- **Input**: grayscale fingerprints resized to 128×128
+- **Patch embedding**: 16×16 patches → 64 tokens/image
+- **Transformer dimension**: \(d_{model}=192\), \(n_{heads}=6\)
+- **Shared block depth**: \(n_{blocks}=4\) (weight-tied across recursion)
+- **Latent memory**: \(K=24\) tokens
+- **Latent steps**: 3 z-updates + 1 y-update per recursion cycle
+- **Recursion**: \(T_{recursion}=1\) (full-gradient)
+- **Trainable params**: 1,837,440
 
-**Goals:**
-- Match Siamese ResNet-18 verification performance (EER ≤ 10%)
-- Use significantly fewer fingerprint-specific trainable parameters
-- Faster training time due to frozen encoder (no backprop through ResNet-18)
+Files:
+- **Local notebook**: `notebooks/04_trm_model.ipynb`
+- **Model implementation**: `scripts/trm_model.py`
+- **Colab training notebook**: `notebooks/SiamViTRM_Colab_Final.ipynb`
+- **Saved outputs**: `artifacts/trm/` (weights, plots, `trm_results.json`)
 
-TRM implementation will be added to `notebooks/04_trm.ipynb`.
