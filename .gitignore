@@ -1,6 +1,10 @@
 # Dataset — do not commit raw fingerprint data
 dataset/
 
+reports/
+
+backups/
+
 # Trained model weights
 artifacts/*.pt
 artifacts/*.pth

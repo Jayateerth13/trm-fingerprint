@@ -15,7 +15,7 @@
   "training": {
     "epochs": 20,
     "batch_size": 32,
-    "lr": 0.0003,
+    "lr": 0.0001,
     "weight_decay": 0.05,
     "N_supervision": 1,
     "EMA_decay": 0.995,
@@ -25,14 +25,13 @@
   },
   "evaluation": {
     "test_pairs": 3696,
-    "eer": 0.1588203463203463,
-    "eer_threshold": 0.8734336293532041,
-    "accuracy_at_eer": 0.8411796536796536,
-    "far_at_eer": 0.15963203463203463,
-    "frr_at_eer": 0.15800865800865802,
+    "eer": 0.1507034632034632,
+    "eer_threshold": 0.8789994308131491,
+    "accuracy_at_eer": 0.8492965367965368,
+    "far_at_eer": 0.15151515151515152,
+    "frr_at_eer": 0.14989177489177488,
     "model_params": 1837440,
-    "false_accepts": 295,
-    "false_rejects": 292
+    "false_accepts": 280,
+    "false_rejects": 277
   }
 }
-
