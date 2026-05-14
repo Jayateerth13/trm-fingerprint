@@ -68,21 +68,11 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**3. Place the FVC2004 dataset**
+**3. FVC2004**
 
-The dataset is not included in this repository. Place it at:
+Not included in the repo. For local notebooks, put the `DB*_A` / `DB*_B` folders under `dataset/FVC2004/` (see `01_data_engineering.ipynb`).
 
-```
-dataset/FVC2004/DB1_A/
-dataset/FVC2004/DB1_B/
-dataset/FVC2004/DB2_A/
-...
-dataset/FVC2004/DB4_B/
-```
-
-Each folder should contain `.tif` files named `{finger}_{impression}.tif` (e.g. `1_1.tif`).
-
-> **Need the dataset?** If you have trouble obtaining FVC2004, feel free to reach out at **jayateerth.kamatgi@sjsu.edu**.
+> **Need the dataset?** If you have trouble obtaining FVC2004, email **jayateerth.kamatgi@sjsu.edu**.
 
 ---
 
@@ -99,13 +89,13 @@ jupyter notebook
 | 1 | `01_data_engineering.ipynb` | Builds manifest, splits by finger identity, generates pairs |
 | 2 | `02_eda.ipynb` | EDA — intensity distributions, NCC analysis, class balance plots |
 | 3 | `03_baseline.ipynb` | NCC baseline (EER 30.8%) and Siamese ResNet-18 (EER 8.7%) |
-| 4 | `04_trm_model.ipynb` | SiamViTRM (TRM/ViTRM-style) training + evaluation; saves outputs to `artifacts/trm/` |
+| 4 | `04_trm_model.ipynb` | SiamViTRM (TRM/ViTRM-style) training + evaluation; saves outputs to `artifacts/trm/` (best Colab run: **15.07%** test EER — see `trm_results.json`) |
 
 All outputs (CSVs, plots, model weights, result JSON) are saved to `artifacts/`.
 
 > **GPU:** The baseline notebook runs on CPU by default. To use a GPU, set `FORCE_CPU = False` in Cell 1 of `03_baseline.ipynb`. For free GPU access, use [Google Colab](https://colab.research.google.com) or [Kaggle Notebooks](https://www.kaggle.com/code).
 
-> **Colab training:** The notebook `notebooks/SiamViTRM_Colab_Final.ipynb` was used to run the SiamViTRM training on GPU and export the resulting artifacts under `artifacts/trm/`.
+> **Colab:** `notebooks/SiamViTRM_Colab_Final.ipynb` (GPU training; shipped metrics in `artifacts/trm/trm_results.json` — **15.07%** test EER for the saved run).
 
 ---
 
@@ -115,7 +105,9 @@ All outputs (CSVs, plots, model weights, result JSON) are saved to `artifacts/`.
 |--------|-----------:|------:|----:|-------------:|----:|----:|
 | NCC (no learning) | 2,500 | 0 | 0.308 | 0.692 | 0.307 | 0.309 |
 | Siamese ResNet-18 | 2,500 | 11.24M | **0.087** | **0.913** | 0.086 | 0.088 |
-| SiamViTRM (TRM/ViTRM-style) | 3,696 | 1.837M | 0.159 | 0.841 | 0.160 | 0.158 |
+| SiamViTRM (TRM/ViTRM-style) | 3,696 | 1.837M | **0.151** (15.07%) | 0.849 | 0.152 | 0.150 |
+
+SiamViTRM numbers are from `artifacts/trm/trm_results.json`: **test EER 15.07%** (peak LR $10^{-4}$, $N_{\mathrm{sup}}{=}1$, 20 epochs, EMA checkpoint chosen by best validation EER). The EER column is the rate as a fraction (~0.1507, shown rounded). NCC and ResNet-18 use 2,500 random test pairs; SiamViTRM uses all 3,696 test pairs.
 
 Siamese ResNet-18: 11.2M parameters, trained for 6 epochs on 8,000 pairs (CPU).
 
@@ -136,6 +128,7 @@ This repository includes **SiamViTRM**, a parameter-efficient Siamese verifier t
 - **Latent steps**: 3 z-updates + 1 y-update per recursion cycle
 - **Recursion**: \(T_{recursion}=1\) (full-gradient)
 - **Trainable params**: 1,837,440
+- **Peak learning rate**: \(10^{-4}\), \(N_{\mathrm{sup}}=1\) (matches `trm_results.json`; **15.07%** test EER for the saved Colab run)
 
 Files:
 - **Local notebook**: `notebooks/04_trm_model.ipynb`
@@ -143,3 +136,6 @@ Files:
 - **Colab training notebook**: `notebooks/SiamViTRM_Colab_Final.ipynb`
 - **Saved outputs**: `artifacts/trm/` (weights, plots, `trm_results.json`)
 
+**Code Repository:** [github.com/Jayateerth13/trm-fingerprint](https://github.com/Jayateerth13/trm-fingerprint)
+
+**FVC2004 dataset:** [https://huggingface.co/datasets/tourmii/FVC2004](https://huggingface.co/datasets/tourmii/FVC2004) (Hugging Face).
